@@ -13,7 +13,19 @@
   "bugs": {
     "url": "https://github.com/zcf0508/vue-scan/issues"
   },
-  "main": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./vue2": {
+      "types": "./dist/index_vue2.d.mts",
+      "import": "./dist/index_vue2.mjs",
+      "require": "./dist/index_vue2.cjs"
+    }
+  },
+  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [

@@ -6,6 +6,7 @@ export default defineBuildConfig({
     'src/index_vue2',
   ],
   rollup: {
+    emitCJS: true,
     inlineDependencies: true,
     json: {
       compact: true,

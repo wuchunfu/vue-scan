@@ -48,7 +48,7 @@ app.mount('#app')
 ```ts
 // vue2
 import Vue from 'vue'
-import VueScan, { type VueScanBaseOptions } from 'z-vue-scan/src/index_vue2'
+import VueScan, { type VueScanBaseOptions } from 'z-vue-scan/vue2'
 import App from './App.vue'
 
 Vue.use<VueScanBaseOptions>(VueScan, {})
