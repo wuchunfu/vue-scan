@@ -1,5 +1,5 @@
 import type { Plugin } from 'vue-demi'
-import type { VueScanBaseOptions, VueScanOptions } from './types'
+import type { VueScanBaseOptions } from './types'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
 import { clearhighlight, highlight, unhighlight } from './core'
 import { isDev } from './utils'
