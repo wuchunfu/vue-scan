@@ -1,6 +1,7 @@
+import type { Options } from '../types'
 import { createHighlight, getComponentBoundingRect, getInstanceName, updateHighlight, type VueAppInstance } from '@vue/devtools-kit'
 
-export function highlight(instance: VueAppInstance, uuid: string) {
+export function highlight(instance: VueAppInstance, uuid: string, options?: Options) {
   const bounds = getComponentBoundingRect(instance)
   if (!bounds.width && !bounds.height)
     return
@@ -52,6 +53,7 @@ export function highlight(instance: VueAppInstance, uuid: string) {
   line-height: 12px !important;
   padding: 2px 4px !important;
   top: ${bounds.top < 16 ? 0 : '-16px'} !important;
+  display: ${options?.hideCompnentName ? 'none' : 'block'} !important;
 }
 
 #${uuid} #__vue-devtools-component-inspector__indicator__ {

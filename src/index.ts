@@ -27,7 +27,7 @@ const plugin: ObjectPlugin<Options> = {
           const name = getInstanceName(instance)
           const uuid = `${name}__${(this as any).__uuid as string}`.replaceAll(' ', '_')
 
-          highlight(instance, uuid)
+          highlight(instance, uuid, options)
 
           setTimeout(() => {
             unhighlight(uuid)
