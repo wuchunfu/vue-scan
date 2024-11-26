@@ -2,7 +2,7 @@ import type { ObjectPlugin } from 'vue-demi'
 import type { Options } from './types'
 import process from 'node:process'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
-import { clearhighlight, debounceUnhighlightSettimeout, highlight, unhighlight } from './core'
+import { clearhighlight, debounceUnhighlightSettimeout, highlight } from './core'
 
 const plugin: ObjectPlugin<Options> = {
   install: (app: any, options) => {
