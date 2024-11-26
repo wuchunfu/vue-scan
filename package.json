@@ -1,0 +1,58 @@
+{
+  "name": "vue-scan",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "",
+  "author": "zcf0508",
+  "license": "MIT",
+  "homepage": "https://github.com/zcf0508/vue-scan#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zcf0508/vue-scan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zcf0508/vue-scan/issues"
+  },
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "pnpm -C examples/vue3 dev",
+    "dev:vue2": "pnpm -C examples/vue2 dev",
+    "build": "unbuild",
+    "typecheck": "tsc",
+    "release": "bumpp"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.0.0-rc.1",
+    "vue": "^2.0.0 || >=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "vue-demi": "latest"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.9.2",
+    "@types/node": "^22.10.0",
+    "@vue/devtools-kit": "^7.6.4",
+    "bumpp": "^9.8.1",
+    "consola": "^3.2.3",
+    "typescript": "^5.6.3",
+    "unbuild": "^2.0.0",
+    "uuid": "^11.0.3",
+    "vue": "^3.0.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@vue/devtools-kit": "patches/@vue__devtools-kit.patch"
+    }
+  }
+}
