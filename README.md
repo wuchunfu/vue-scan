@@ -29,7 +29,7 @@ pnpm add z-vue-scan
 ```ts
 // vue3
 import { createApp } from 'vue'
-import VueScan from 'vue-scan'
+import VueScan from 'z-vue-scan'
 
 import App from './App.vue'
 
@@ -41,7 +41,7 @@ app.mount('#app')
 ```ts
 // vue2
 import Vue from 'vue'
-import VueScan from 'vue-scan/dist/index_vue2'
+import VueScan from 'z-vue-scan/dist/index_vue2'
 import App from './App.vue'
 
 Vue.use(VueScan)
