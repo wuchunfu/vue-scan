@@ -27,24 +27,31 @@ pnpm add z-vue-scan
 ## Usage
 
 ```ts
+interface Options {
+  enable?: boolean
+  hideCompnentName?: boolean
+}
+```
+
+```ts
 // vue3
 import { createApp } from 'vue'
-import VueScan from 'z-vue-scan'
+import VueScan, { type VueScanOptions } from 'z-vue-scan/src'
 
 import App from './App.vue'
 
 const app = createApp(App)
-app.use(VueScan)
+app.use<VueScanOptions>(VueScan, {})
 app.mount('#app')
 ```
 
 ```ts
 // vue2
 import Vue from 'vue'
-import VueScan from 'z-vue-scan/dist/index_vue2'
+import VueScan, { type VueScanBaseOptions } from 'z-vue-scan/src/index_vue2'
 import App from './App.vue'
 
-Vue.use(VueScan)
+Vue.use<VueScanBaseOptions>(VueScan, {})
 
 new Vue({
   render: h => h(App),

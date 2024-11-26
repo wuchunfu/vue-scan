@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import VueScan from 'z-vue-scan/src/index_vue2'
+import VueScan, { type VueScanBaseOptions } from 'z-vue-scan/src/index_vue2'
 import App from './App.vue'
 
 import './assets/main.css'
 
-Vue.use(VueScan)
+Vue.use<VueScanBaseOptions>(VueScan, {})
 
 new Vue({
   render: h => h(App),

@@ -1,7 +1,7 @@
-import type { Options } from '../types'
+import type { VueScanBaseOptions } from '../types'
 import { createHighlight, getComponentBoundingRect, getInstanceName, updateHighlight, type VueAppInstance } from '@vue/devtools-kit'
 
-export function highlight(instance: VueAppInstance, uuid: string, options?: Options) {
+export function highlight(instance: VueAppInstance, uuid: string, options?: VueScanBaseOptions) {
   const bounds = getComponentBoundingRect(instance)
   if (!bounds.width && !bounds.height)
     return

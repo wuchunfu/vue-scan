@@ -1,11 +1,11 @@
 import type { Plugin } from 'vue-demi'
-import type { Options } from './types'
+import type { VueScanBaseOptions, VueScanOptions } from './types'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
 import { clearhighlight, highlight, unhighlight } from './core'
 import { isDev } from './utils'
 
-const plugin: Plugin<Options> = {
-  install: (app: any, options) => {
+const plugin: Plugin<VueScanBaseOptions> = {
+  install: (app: any, options?: VueScanBaseOptions) => {
     const { enable = isDev() } = options || {}
 
     if (!enable) {
@@ -56,3 +56,5 @@ const plugin: Plugin<Options> = {
 }
 
 export default plugin
+
+export * from './types'
