@@ -1,8 +1,8 @@
 {
-  "name": "vue-scan",
+  "name": "z-vue-scan",
   "type": "module",
   "version": "0.0.1",
-  "description": "",
+  "description": "The component will flash with a red border when it will update.",
   "author": "zcf0508",
   "license": "MIT",
   "homepage": "https://github.com/zcf0508/vue-scan#readme",
