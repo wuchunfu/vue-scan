@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import HelloWorld from './components/HelloWorld.vue'
 
-const a = ref('')
+const b = ref('')
 </script>
 
 <template>
   <div>
     <div>
-      {{ a }}
+      {{ b }}
     </div>
-    input: <input v-model="a">
+    <HelloWorld v-model:msg="b" />
   </div>
 </template>

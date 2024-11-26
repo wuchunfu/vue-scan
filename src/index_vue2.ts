@@ -1,20 +1,22 @@
-import type { ObjectPlugin } from 'vue-demi'
+import type { Plugin } from 'vue-demi'
 import type { Options } from './types'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
-import { clearhighlight, debounceUnhighlightSettimeout, highlight } from './core'
+import { clearhighlight, highlight, unhighlight } from './core'
 import { isDev } from './utils'
 
-const plugin: ObjectPlugin<Options> = {
+const plugin: Plugin<Options> = {
   install: (app: any, options) => {
-    const { enable = !isDev() } = options
+    const { enable = isDev() } = options || {}
 
-    if (enable === false) {
+    if (!enable) {
       return
     }
 
     app.mixin({
       beforeCreate() {
         (this as any).__uuid = new Date().getTime()
+
+        this.__flashTimeout = null as ReturnType<typeof setTimeout> | null
       },
       beforeUpdate() {
         const instance = (() => {
@@ -35,7 +37,14 @@ const plugin: ObjectPlugin<Options> = {
 
           highlight(instance, uuid, options)
 
-          debounceUnhighlightSettimeout(uuid)
+          if (this.__flashTimeout) {
+            clearTimeout(this.__flashTimeout)
+            this.__flashTimeout = null
+          }
+
+          this.__flashTimeout = setTimeout(() => {
+            unhighlight(uuid)
+          }, 200)
         }
       },
       unmounted() {
