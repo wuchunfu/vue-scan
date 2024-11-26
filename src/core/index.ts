@@ -1,5 +1,6 @@
 import type { Options } from '../types'
 import { createHighlight, getComponentBoundingRect, getInstanceName, updateHighlight, type VueAppInstance } from '@vue/devtools-kit'
+import { debounce } from 'lodash-es'
 
 export function highlight(instance: VueAppInstance, uuid: string, options?: Options) {
   const bounds = getComponentBoundingRect(instance)
@@ -77,3 +78,9 @@ export function clearhighlight(uuid: string) {
     document.body.removeChild(el)
   }
 }
+
+export const debounceUnhighlightSettimeout = debounce((uuid: string) => {
+  setTimeout(() => {
+    unhighlight(uuid)
+  }, 200)
+}, 200)

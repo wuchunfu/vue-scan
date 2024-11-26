@@ -41,13 +41,14 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.2",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.10.0",
     "@vue/devtools-kit": "^7.6.4",
     "bumpp": "^9.8.1",
     "consola": "^3.2.3",
+    "lodash-es": "^4.17.21",
     "typescript": "^5.6.3",
     "unbuild": "^2.0.0",
-    "uuid": "^11.0.3",
     "vue": "^3.0.0"
   },
   "pnpm": {
