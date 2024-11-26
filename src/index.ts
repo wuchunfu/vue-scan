@@ -1,14 +1,19 @@
-import type { Plugin } from 'vue-demi'
+import type { ObjectPlugin } from 'vue-demi'
+import type { Options } from './types'
+import process from 'node:process'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
 import { clearhighlight, highlight, unhighlight } from './core'
 
-const plugin: Plugin = {
-  install: (app: any) => {
+const plugin: ObjectPlugin<Options> = {
+  install: (app: any, options) => {
+    if (process.env.NODE_ENV === 'production' || options?.enable === false) {
+      return
+    }
+
     app.mixin({
       beforeCreate() {
         (this as any).__uuid = new Date().getTime()
       },
-      // 如果组件重新渲染了，那么闪烁一下组件的边缘
       beforeUpdate() {
         const instance = (() => {
           return (this as any).$
