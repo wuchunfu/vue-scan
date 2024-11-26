@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueScan from 'vue-scan/src/index_vue2'
+import VueScan from 'z-vue-scan/src/index_vue2'
 import App from './App.vue'
 
 import './assets/main.css'
