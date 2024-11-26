@@ -11,11 +11,15 @@ const plugin: Plugin = {
       // 如果组件重新渲染了，那么闪烁一下组件的边缘
       beforeUpdate() {
         const instance = (() => {
-          return (this as any).$
+          this.subTree = {
+            el: this.$el,
+            component: this.$children,
+          }
+          return this
         })() as VueAppInstance
 
         const el = (() => {
-          return instance?.vnode.el
+          return instance?.$el
         })() as HTMLElement | undefined
 
         if (el) {
