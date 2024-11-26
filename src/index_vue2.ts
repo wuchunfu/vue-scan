@@ -1,12 +1,12 @@
 import type { ObjectPlugin } from 'vue-demi'
 import type { Options } from './types'
-import process from 'node:process'
 import { getInstanceName, type VueAppInstance } from '@vue/devtools-kit'
 import { clearhighlight, debounceUnhighlightSettimeout, highlight } from './core'
+import { isDev } from './utils'
 
 const plugin: ObjectPlugin<Options> = {
   install: (app: any, options) => {
-    if (process.env.NODE_ENV === 'production' || options?.enable === false) {
+    if (!isDev() || options?.enable === false) {
       return
     }
 
