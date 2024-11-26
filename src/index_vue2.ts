@@ -6,7 +6,9 @@ import { isDev } from './utils'
 
 const plugin: ObjectPlugin<Options> = {
   install: (app: any, options) => {
-    if (!isDev() || options?.enable === false) {
+    const { enable = !isDev() } = options
+
+    if (enable === false) {
       return
     }
 
