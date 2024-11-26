@@ -77,6 +77,10 @@ const plugin: Plugin = {
             return (this as any).$
           }
           else {
+            this.subTree = {
+              el: this.$el,
+              component: this.$children,
+            }
             return this
           }
         })() as VueAppInstance
@@ -92,7 +96,7 @@ const plugin: Plugin = {
 
         if (el) {
           const name = getInstanceName(instance)
-          const uuid = `${name}__${(this as any).__uuid as string}`
+          const uuid = `${name}__${(this as any).__uuid as string}`.replaceAll(' ', '_')
 
           highlight(instance, uuid)
 
