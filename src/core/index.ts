@@ -51,6 +51,7 @@ export function highlight(instance: VueAppInstance, uuid: string) {
   font-size: 8px !important;
   line-height: 12px !important;
   padding: 2px 4px !important;
+  top: ${bounds.top < 16 ? 0 : '-16px'} !important;
 }
 
 #${uuid} #__vue-devtools-component-inspector__indicator__ {
