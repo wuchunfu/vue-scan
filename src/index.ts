@@ -6,7 +6,7 @@ import { isDev } from './utils'
 
 const plugin: Plugin<VueScanOptions> = {
   install: (app: any, options?: VueScanBaseOptions) => {
-    const { enable = isDev() } = options || {}
+    const { enable = isDev(), interval = 600 } = options || {}
 
     if (!enable) {
       return
@@ -45,7 +45,7 @@ const plugin: Plugin<VueScanOptions> = {
             unhighlight(uuid)
             this.__flashTimeout = null
             this.__flashCount = 0
-          }, 200)
+          }, interval)
         }
       },
       unmounted() {
