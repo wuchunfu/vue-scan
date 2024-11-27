@@ -1,11 +1,11 @@
 import type { VueScanBaseOptions } from '../types'
 import { createHighlight, getComponentBoundingRect, getInstanceName, updateHighlight, type VueAppInstance } from '@vue/devtools-kit'
 
-export function highlight(instance: VueAppInstance, uuid: string, options?: VueScanBaseOptions) {
+export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: VueScanBaseOptions) {
   const bounds = getComponentBoundingRect(instance)
   if (!bounds.width && !bounds.height)
     return
-  const name = getInstanceName(instance)
+  const name = `${getInstanceName(instance)} x ${flashCount}`
 
   if (document.getElementById(uuid)) {
     updateHighlight({

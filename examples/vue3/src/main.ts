@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import VueScan, { type VueScanOptions } from 'z-vue-scan/src'
+import VueScan, { type VueScanOptions } from 'z-vue-scan'
 
 import App from './App.vue'
 import './assets/main.css'

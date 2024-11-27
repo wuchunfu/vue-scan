@@ -17,6 +17,7 @@ const plugin: Plugin<VueScanOptions> = {
         (this as any).__uuid = new Date().getTime()
 
         this.__flashTimeout = null as ReturnType<typeof setTimeout> | null
+        this.__flashCount = 0
       },
       beforeUpdate() {
         const instance = (() => {
@@ -31,7 +32,9 @@ const plugin: Plugin<VueScanOptions> = {
           const name = getInstanceName(instance)
           const uuid = `${name}__${(this as any).__uuid as string}`.replaceAll(' ', '_')
 
-          highlight(instance, uuid, options)
+          this.__flashCount++
+
+          highlight(instance, uuid, this.__flashCount, options)
 
           if (this.__flashTimeout) {
             clearTimeout(this.__flashTimeout)
@@ -41,6 +44,7 @@ const plugin: Plugin<VueScanOptions> = {
           this.__flashTimeout = setTimeout(() => {
             unhighlight(uuid)
             this.__flashTimeout = null
+            this.__flashCount = 0
           }, 200)
         }
       },
