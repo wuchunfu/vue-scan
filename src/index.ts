@@ -5,7 +5,7 @@ import { createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core/inde
 import { isDev } from './utils'
 
 const plugin: Plugin<VueScanOptions> = {
-  install: (app: any, options?: VueScanBaseOptions) => {
+  install: (app, options?: VueScanBaseOptions) => {
     const { enable = isDev() } = options || {}
 
     if (!enable) {
@@ -13,6 +13,14 @@ const plugin: Plugin<VueScanOptions> = {
     }
 
     app.mixin({
+      onBeforeMount() {
+        const instance = (() => {
+          return (this as any).$
+        })() as VueAppInstance
+
+        // @ts-expect-error injected flag
+        instance.__vue_scan_injected__ = true
+      },
       beforeUpdate() {
         const instance = (() => {
           return (this as any).$

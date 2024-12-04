@@ -6,9 +6,6 @@
     "rootDir": ".",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "paths": {
-      "jina-crawler": ["./src/index.ts"]
-    },
     "resolveJsonModule": true,
     "strict": true,
     "strictNullChecks": true,

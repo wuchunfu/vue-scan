@@ -1,13 +1,13 @@
+import type { VueAppInstance } from '@vue/devtools-kit'
 import { getInstanceName } from '@vue/devtools-kit'
 import { clearhighlight, highlight, unhighlight } from './highlight'
 
-interface BACE_VUE_INSTANCE {
-  subTree: {
-    el?: HTMLElement
-  }
-  component?: BACE_VUE_INSTANCE
-  children?: BACE_VUE_INSTANCE []
-  uid?: number
+export interface BACE_VUE_INSTANCE extends VueAppInstance {
+  __vue_scan_injected__?: boolean
+  /** beforeUpdate */
+  bu?: Array<() => void> | null
+  /** beforeUnmount */
+  bum?: Array<() => void> | null
   _uid?: number
   __flashCount?: number
   __flashTimeout?: ReturnType<typeof setTimeout> | null

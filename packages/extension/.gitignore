@@ -24,9 +24,3 @@ web-ext.config.ts
 *.njsproj
 *.sln
 *.sw?
-
-
-dist
-test/**/pnpm-lock.yaml
-package.back.json
-cache.json
