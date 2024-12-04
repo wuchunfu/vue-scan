@@ -37,7 +37,7 @@
     "dev:vue2": "pnpm -C examples/vue2 dev",
     "build": "unbuild",
     "typecheck": "tsc",
-    "release": "bumpp"
+    "release": "bumpp -r"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-rc.1",
