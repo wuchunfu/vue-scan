@@ -30,3 +30,4 @@ dist
 test/**/pnpm-lock.yaml
 package.back.json
 cache.json
+packages/extension/public/auto.[c|m]js
