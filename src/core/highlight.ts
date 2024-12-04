@@ -1,5 +1,10 @@
-import type { VueScanBaseOptions } from '../types'
-import { createHighlight, getComponentBoundingRect, getInstanceName, updateHighlight, type VueAppInstance } from '@vue/devtools-kit'
+import {
+  createHighlight,
+  getComponentBoundingRect,
+  getInstanceName,
+  updateHighlight,
+  type VueAppInstance,
+} from '@vue/devtools-kit'
 
 export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: {
   hideCompnentName?: boolean
