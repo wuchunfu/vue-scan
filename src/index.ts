@@ -18,7 +18,6 @@ const plugin: Plugin<VueScanOptions> = {
           return (this as any).$
         })() as VueAppInstance
 
-        // @ts-expect-error injected flag
         instance.__vue_scan_injected__ = true
       },
       beforeUpdate() {
