@@ -1,17 +1,25 @@
-<script setup lang="ts">
-const props = defineProps(['value'])
-const emit = defineEmits(['update:value'])
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-function handleInput(e: Event) {
-  emit('update:value', (e.target as HTMLInputElement)?.value)
-}
+export default defineComponent({
+  name: 'HelloWorld',
+  props: {
+    value: String,
+  },
+  emits: ['update:value'],
+  methods: {
+    handleInput(e: Event) {
+      this.$emit('update:value', (e.target as HTMLInputElement)?.value)
+    },
+  },
+})
 </script>
 
 <template>
   <div>
     <div>
-      {{ props.value }}
+      {{ $props.value }}
     </div>
-    input: <input :value="props.value" @input="handleInput">
+    input: <input :value="$props.value" @input="handleInput">
   </div>
 </template>
