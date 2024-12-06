@@ -11,6 +11,10 @@ export interface BACE_VUE_INSTANCE extends VueAppInstance {
   _uid?: number
   __flashCount?: number
   __flashTimeout?: ReturnType<typeof setTimeout> | null
+  $options?: {
+    beforeUpdate?: Array<() => void> | null
+    beforeDestroy?: Array<() => void> | null
+  }
 }
 
 export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?: {
@@ -25,7 +29,7 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
     return
   }
 
-  const el = instance.subTree.el
+  const el = instance?.subTree?.el || instance.$el
 
   if (!el) {
     return
@@ -61,7 +65,7 @@ export function createOnBeforeUnmountHook(instance?: BACE_VUE_INSTANCE) {
     return
   }
 
-  const el = instance.subTree.el
+  const el = instance?.subTree?.el || instance.$el
 
   if (!el) {
     return

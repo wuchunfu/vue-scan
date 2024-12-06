@@ -1,10 +1,9 @@
 import {
   createHighlight,
-  getComponentBoundingRect,
-  getInstanceName,
   updateHighlight,
   type VueAppInstance,
 } from '@vue/devtools-kit'
+import { getComponentBoundingRect, getInstanceName } from './utils'
 
 export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: {
   hideCompnentName?: boolean

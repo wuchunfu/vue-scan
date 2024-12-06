@@ -13,47 +13,20 @@ const plugin: Plugin<VueScanBaseOptions> = {
     }
 
     app.mixin({
-      onBeforeMount() {
-        const instance = (() => {
-          this.$vnode._componentTag = this.$vnode.tag
-          this.subTree = {
-            el: this.$el,
-            children: this.$children,
-            component: this.$children ? null : this.$vnode,
-          }
-          this.type = this.$vnode
-          return this
-        })() as VueAppInstance
+      beforeMount() {
+        const instance = this as VueAppInstance
 
         instance.__vue_scan_injected__ = true
       },
       beforeUpdate() {
-        const instance = (() => {
-          this.$vnode._componentTag = this.$vnode.tag
-          this.subTree = {
-            el: this.$el,
-            children: this.$children,
-            component: this.$children ? null : this.$vnode,
-          }
-          this.type = this.$vnode
-          return this
-        })() as VueAppInstance
+        const instance = this as VueAppInstance
 
         const hook = createOnBeforeUpdateHook(instance, options)
 
         hook?.()
       },
-      onBeforeUnmount() {
-        const instance = (() => {
-          this.$vnode._componentTag = this.$vnode.tag
-          this.subTree = {
-            el: this.$el,
-            children: this.$children,
-            component: this.$children ? null : this.$vnode,
-          }
-          this.type = this.$vnode
-          return this
-        })() as VueAppInstance
+      beforeDestroy() {
+        const instance = this as VueAppInstance
 
         const hook = createOnBeforeUnmountHook(instance)
 
