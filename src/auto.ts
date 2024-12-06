@@ -23,41 +23,7 @@ import plugin from './index'
   }
 })()
 
-function findMatchingDomain(host: string, domainMap: Record<string, string>): string | undefined {
-  // Split the host into parts (e.g., "api.bilibili.com" -> ["api", "bilibili", "com"])
-  const hostParts = host.split('.')
-
-  // Try to find the most specific match first
-  for (let i = 0; i < hostParts.length; i++) {
-    const domain = hostParts.slice(i).join('.')
-    if (domain in domainMap) {
-      return domainMap[domain]
-    }
-  }
-
-  return undefined
-}
-
-function getMountDom(): string {
-  // Different websites mount to different nodes
-  // Preset some mappings
-  const web_dom_map: Record<string, string> = {
-    'nuxt.com': '__nuxt',
-    // Add more mappings as needed
-  }
-
-  const host = window.location.host
-  // Try to find a matching domain (including subdomains)
-  const matchedDomId = findMatchingDomain(host, web_dom_map)
-
-  // Return the matched domain ID or default to 'app'
-  return matchedDomId ?? 'app'
-}
-
 // Check if the __vue_app__ property exists on the #app node of the page
-
-const mountDom = getMountDom()
-const targetNode = document.getElementById(mountDom)
 
 function initializeObserver(node: HTMLElement) {
   let observer: MutationObserver | undefined
@@ -134,9 +100,8 @@ function initializeObserver(node: HTMLElement) {
         else if (vueInstance?.subTree?.component) {
           mixin(vueInstance.subTree.component as BACE_VUE_INSTANCE)
         }
-        // @ts-expect-error compact children
+
         else if (!vueInstance?.subTree && vueInstance?.children) {
-          // @ts-expect-error compact children
           mixinChildren(vueInstance.children)
         }
       }
@@ -160,15 +125,32 @@ function initializeObserver(node: HTMLElement) {
   callback()
 }
 
-if (!targetNode) {
-  console.warn(`[vue-scan] Target node #${mountDom} not found. Will retry when DOM changes.`)
+function getMountDoms() {
+  const elements = Array.from(document.body.getElementsByTagName('*'))
 
+  return elements.filter((element) => {
+    // @ts-expect-error vue internal
+    return !!element.id && !!element.__vue_app__
+  })
+}
+
+const mountDoms = getMountDoms()
+
+if (mountDoms.length === 0) {
   const documentObserver = new MutationObserver(() => {
-    const node = document.getElementById(mountDom)
-    if (node) {
-      documentObserver.disconnect()
-      initializeObserver(node)
+    const mountDoms = getMountDoms()
+
+    if (mountDoms.length === 0) {
+      return
     }
+
+    mountDoms.forEach((mountDom) => {
+      const node = document.getElementById(mountDom.id)
+      if (node) {
+        documentObserver.disconnect()
+        initializeObserver(node)
+      }
+    })
   })
 
   documentObserver.observe(document.body, {
@@ -177,5 +159,10 @@ if (!targetNode) {
   })
 }
 else {
-  initializeObserver(targetNode)
+  mountDoms.forEach((mountDom) => {
+    const node = document.getElementById(mountDom.id)
+    if (node) {
+      initializeObserver(node)
+    }
+  })
 }
