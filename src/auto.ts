@@ -182,6 +182,11 @@ const documentObserver = new MutationObserver(() => {
     mountDoms.forEach((mountDom) => {
       const node = document.getElementById(mountDom.id)
       if (node) {
+        // @ts-expect-error vue internal
+        if (node.__vue_app__) {
+          documentObserver.disconnect()
+        }
+
         injectVueScan(node)
       }
     })
