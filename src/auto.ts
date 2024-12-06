@@ -1,4 +1,5 @@
 import type { VNodeNormalizedChildren } from 'vue-demi'
+import { throttle } from 'lodash-es'
 import { type BACE_VUE_INSTANCE, createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core/hook'
 import plugin from './index'
 
@@ -171,7 +172,7 @@ function getMountDoms() {
   })
 }
 
-const documentObserver = new MutationObserver(() => {
+const documentObserver = new MutationObserver(throttle(() => {
   const mountDoms = getMountDoms()
 
   if (mountDoms.length === 0) {
@@ -191,7 +192,7 @@ const documentObserver = new MutationObserver(() => {
       }
     })
   }
-})
+}, 600))
 
 documentObserver.observe(document.body, {
   attributes: true,

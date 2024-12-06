@@ -1,9 +1,12 @@
 import {
+  updateHighlight as _updateHighlight,
   createHighlight,
-  updateHighlight,
   type VueAppInstance,
 } from '@vue/devtools-kit'
+import { debounce } from 'lodash-es'
 import { getComponentBoundingRect, getInstanceName } from './utils'
+
+const updateHighlight = debounce(_updateHighlight, 200)
 
 export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: {
   hideCompnentName?: boolean
@@ -75,11 +78,15 @@ export function unhighlight(uuid: string) {
   if (el) {
     el.style.opacity = '0'
   }
+
+  setTimeout(() => {
+    el?.remove()
+  }, 2000)
 }
 
 export function clearhighlight(uuid: string) {
   const el = document.getElementById(uuid)
   if (el) {
-    document.body.removeChild(el)
+    el.remove()
   }
 }
