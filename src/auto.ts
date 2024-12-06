@@ -25,21 +25,20 @@ import plugin from './index'
 
 // Check if the __vue_app__ property exists on the #app node of the page
 
-function initializeObserver(node: HTMLElement) {
-  let observer: MutationObserver | undefined
-
-  const callback = () => {
+function injectVueScan(node: HTMLElement) {
+  // @ts-expect-error vue internal
+  if ((node.__vue_app__ || node.__vue__)) {
     // @ts-expect-error vue internal
-    if (node.__vue_app__ && window.__VUE_SCAN__) {
-      observer?.disconnect()
+    if (node.__vue_app__) { // VUE 3
+      // @ts-expect-error vue internal
+      const vueInstance = node.__vue_app__._container._vnode.component as BACE_VUE_INSTANCE
 
       // @ts-expect-error vue internal
       node.__vue_app__.use(window.__VUE_SCAN__.plugin)
 
-      // @ts-expect-error vue internal
-      const vueInstance = node.__vue_app__._container._vnode.component as BACE_VUE_INSTANCE
-
-      console.log(vueInstance)
+      if (!vueInstance.__vue_scan_injected__) {
+        console.log(vueInstance)
+      }
 
       function mixinChildren(children: VNodeNormalizedChildren) {
         if (!children) {
@@ -92,8 +91,6 @@ function initializeObserver(node: HTMLElement) {
           }
         }
 
-        vueInstance.__vue_scan_injected__ = true
-
         if (!vueInstance?.subTree?.component && vueInstance?.subTree?.children) {
           mixinChildren(vueInstance.subTree.children)
         }
@@ -108,61 +105,91 @@ function initializeObserver(node: HTMLElement) {
 
       mixin(vueInstance)
 
-      console.log('vue scan inject success')
+      if (!vueInstance.__vue_scan_injected__) {
+        console.log('vue scan inject success')
+      }
+
+      vueInstance.__vue_scan_injected__ = true
+    }
+    // @ts-expect-error vue internal
+    else if (node.__vue__) { // VUE 2
+      // @ts-expect-error vue internal
+      const vueInstance = node.__vue__ as BACE_VUE_INSTANCE
+
+      if (!vueInstance.__vue_scan_injected__) {
+        console.log(vueInstance)
+      }
+
+      function mixin(vueInstance: BACE_VUE_INSTANCE) {
+        if (vueInstance?.$el && vueInstance.__vue_scan_injected__ !== true) {
+          const onBeforeUpdate = createOnBeforeUpdateHook(vueInstance)
+          const onBeforeUnmount = createOnBeforeUnmountHook(vueInstance)
+
+          if (onBeforeUpdate) {
+            if (vueInstance?.$options?.beforeUpdate) {
+              vueInstance.$options.beforeUpdate.push(onBeforeUpdate)
+            }
+            else if (vueInstance?.$options) {
+              vueInstance.$set(vueInstance.$options, 'beforeUpdate', [onBeforeUpdate])
+            }
+          }
+
+          if (onBeforeUnmount) {
+            if (vueInstance?.$options?.beforeDestroy) {
+              vueInstance.$options.beforeDestroy.push(onBeforeUnmount)
+            }
+            else if (vueInstance?.$options) {
+              vueInstance.$set(vueInstance.$options, 'beforeDestroy', [onBeforeUnmount])
+            }
+          }
+        }
+
+        if (vueInstance?.$children) {
+          (vueInstance?.$children as Array<BACE_VUE_INSTANCE>).forEach((child) => {
+            mixin(child)
+          })
+        }
+      }
+
+      mixin(vueInstance)
+
+      if (!vueInstance.__vue_scan_injected__) {
+        console.log('vue scan inject success')
+      }
+
+      vueInstance.__vue_scan_injected__ = true
     }
   }
-
-  observer = new MutationObserver(callback)
-
-  observer.observe(node, {
-    attributes: true,
-    childList: true,
-    subtree: true,
-    characterData: true,
-  })
-
-  // Run the check immediately
-  callback()
 }
 
 function getMountDoms() {
-  const elements = Array.from(document.body.getElementsByTagName('*'))
+  const elements = Array.from(document.body.children)
 
   return elements.filter((element) => {
     // @ts-expect-error vue internal
-    return !!element.id && !!element.__vue_app__
+    return !!element.id && (!!element.__vue_app__ || !!element.__vue__)
   })
 }
 
-const mountDoms = getMountDoms()
+const documentObserver = new MutationObserver(() => {
+  const mountDoms = getMountDoms()
 
-if (mountDoms.length === 0) {
-  const documentObserver = new MutationObserver(() => {
-    const mountDoms = getMountDoms()
+  if (mountDoms.length === 0) {
+    return
+  }
 
-    if (mountDoms.length === 0) {
-      return
-    }
-
+  if (window.__VUE_SCAN__) {
     mountDoms.forEach((mountDom) => {
       const node = document.getElementById(mountDom.id)
       if (node) {
-        documentObserver.disconnect()
-        initializeObserver(node)
+        injectVueScan(node)
       }
     })
-  })
+  }
+})
 
-  documentObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-  })
-}
-else {
-  mountDoms.forEach((mountDom) => {
-    const node = document.getElementById(mountDom.id)
-    if (node) {
-      initializeObserver(node)
-    }
-  })
-}
+documentObserver.observe(document.body, {
+  attributes: true,
+  childList: true,
+  subtree: true,
+})
