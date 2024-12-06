@@ -3,10 +3,10 @@ import {
   createHighlight,
   type VueAppInstance,
 } from '@vue/devtools-kit'
-import { debounce } from 'lodash-es'
+import { throttle } from 'lodash-es'
 import { getComponentBoundingRect, getInstanceName } from './utils'
 
-const updateHighlight = debounce(_updateHighlight, 200)
+const updateHighlight = throttle(_updateHighlight, 300)
 
 export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: {
   hideCompnentName?: boolean
@@ -29,10 +29,6 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
         opacity: '1',
       },
     })
-    const el = document.getElementById(uuid)
-    if (el?.style) {
-      el.style.opacity = '1'
-    }
     return
   }
 
@@ -54,7 +50,7 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
 
   style.innerHTML = `
 #${uuid} {
-  transition: opacity 1.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
+  transition: opacity 3s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
 }
 #${uuid} #__vue-devtools-component-inspector__card__ {
   background-color: rgba(255, 0, 0, 0.5) !important;
@@ -78,10 +74,6 @@ export function unhighlight(uuid: string) {
   if (el) {
     el.style.opacity = '0'
   }
-
-  setTimeout(() => {
-    el?.remove()
-  }, 2000)
 }
 
 export function clearhighlight(uuid: string) {

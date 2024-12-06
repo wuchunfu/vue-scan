@@ -22,7 +22,7 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
   interval?: number
 }) {
   const {
-    interval = 600,
+    interval = 1000,
   } = options || {}
 
   if (!instance) {
