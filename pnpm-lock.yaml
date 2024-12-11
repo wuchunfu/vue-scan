@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@vue/devtools-kit':
-    hash: 3pgcqmbfur54wtsjqowzrsqz5u
+    hash: atm3gwx6ew3xtl7qa2nhoip7bi
     path: patches/@vue__devtools-kit.patch
 
 importers:
@@ -31,7 +31,7 @@ importers:
         version: 22.10.0
       '@vue/devtools-kit':
         specifier: ^7.6.4
-        version: 7.6.4(patch_hash=3pgcqmbfur54wtsjqowzrsqz5u)
+        version: 7.6.4(patch_hash=atm3gwx6ew3xtl7qa2nhoip7bi)
       '@vue/devtools-shared':
         specifier: ^7.6.7
         version: 7.6.7
@@ -6546,7 +6546,7 @@ snapshots:
 
   '@vue/devtools-core@7.6.4(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      '@vue/devtools-kit': 7.6.4(patch_hash=3pgcqmbfur54wtsjqowzrsqz5u)
+      '@vue/devtools-kit': 7.6.4(patch_hash=atm3gwx6ew3xtl7qa2nhoip7bi)
       '@vue/devtools-shared': 7.6.4
       mitt: 3.0.1
       nanoid: 3.3.7
@@ -6556,7 +6556,7 @@ snapshots:
     transitivePeerDependencies:
       - vite
 
-  '@vue/devtools-kit@7.6.4(patch_hash=3pgcqmbfur54wtsjqowzrsqz5u)':
+  '@vue/devtools-kit@7.6.4(patch_hash=atm3gwx6ew3xtl7qa2nhoip7bi)':
     dependencies:
       '@vue/devtools-shared': 7.6.7
       birpc: 0.2.19
@@ -10461,7 +10461,7 @@ snapshots:
   vite-plugin-vue-devtools@7.6.4(rollup@4.27.4)(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))(vue@3.5.13(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-core': 7.6.4(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))(vue@3.5.13(typescript@5.6.3))
-      '@vue/devtools-kit': 7.6.4(patch_hash=3pgcqmbfur54wtsjqowzrsqz5u)
+      '@vue/devtools-kit': 7.6.4(patch_hash=atm3gwx6ew3xtl7qa2nhoip7bi)
       '@vue/devtools-shared': 7.6.4
       execa: 8.0.1
       sirv: 3.0.0

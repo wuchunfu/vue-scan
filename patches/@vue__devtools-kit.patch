@@ -1,5 +1,5 @@
 diff --git a/dist/index.cjs b/dist/index.cjs
-index 0004140e1a340e020f3227a4c0eb63ae04ee7a4c..9cf373cd485529db289edb7ceae80ec7f410be9d 100644
+index 0004140e1a340e020f3227a4c0eb63ae04ee7a4c..70ad9a77e82fc0605f21064c7bac0e1513de9984 100644
 --- a/dist/index.cjs
 +++ b/dist/index.cjs
 @@ -2179,6 +2179,24 @@ function update(options) {
@@ -8,10 +8,10 @@ index 0004140e1a340e020f3227a4c0eb63ae04ee7a4c..9cf373cd485529db289edb7ceae80ec7
  }
 +function updateHighlight(options) {
 +  const containerEl = options?.elementId ? document.getElementById(options.elementId) :getContainerElement();
-+  const cardEl = getCardElement();
-+  const nameEl = getNameElement();
-+  const indicatorEl = getIndicatorElement();
 +  if (containerEl) {
++    const cardEl = containerEl.querySelector('#__vue-devtools-component-inspector__card__');
++    const nameEl = containerEl.querySelector('#__vue-devtools-component-inspector__name__');
++    const indicatorEl = containerEl.querySelector('#__vue-devtools-component-inspector__indicator__');
 +    Object.assign(containerEl.style, {
 +      ...containerStyles,
 +      ...getStyles(options.bounds),
@@ -79,7 +79,7 @@ index d7e6b9b8c83d3178da6b41a054bb0da69e7e77cf..a5f91ba0a0f55cd9feb0bdc6cabf12d0
 +
 +export { type AddInspectorApiPayload, type App, type AppRecord, type ComponentBoundingRect, type ComponentBoundingRectApiPayload, type ComponentBounds, type ComponentHighLighterOptions, type ComponentInspector, type ComponentInstance, type ComponentState, type ComponentTreeNode, type CreateRpcClientOptions, type CreateRpcServerOptions, type CustomCommand, type CustomCommandAction, type CustomInspectorNode, type CustomInspectorOptions, type CustomInspectorState, type CustomTab, type DevToolsApiType, type DevToolsAppRecords, DevToolsContextHookKeys, type DevToolsContextHookPayloads, type DevToolsContextHooks, type DevToolsEvent, type DevToolsHook, DevToolsHooks, DevToolsMessagingHookKeys, type DevToolsMessagingHookPayloads, type DevToolsMessagingHooks, type DevToolsPlugin, type DevToolsState, DevToolsV6PluginAPIHookKeys, type DevToolsV6PluginAPIHookPayloads, type DevToolsV6PluginAPIHooks, type DevtoolsContext, type EditStatePayload, INFINITY, type InspectedComponentData, type InspectorCustomState, type InspectorNodeTag, type InspectorState, type InspectorStateApiPayload, type InspectorStateEditorPayload, type InspectorTree, type InspectorTreeApiPayload, type ModuleIframeView, type ModuleVNodeView, type ModuleView, NAN, NEGATIVE_INFINITY, type OpenInEditorOptions, type PluginDescriptor, type PluginSetupFunction, type Presets, type PropPath, ROUTER_INFO_KEY, ROUTER_KEY, type RouterInfo, type ScreenshotData, type ScreenshotOverlayEvent, type ScreenshotOverlayRenderContext, type ScreenshotOverlayRenderResult, type ScrollToComponentOptions, type StateBase, type TimelineEvent, type TimelineEventOptions, type TimelineLayerOptions, UNDEFINED, type VueAppInstance, type VueHooks, activeAppRecord, addCustomCommand, addCustomTab, addDevToolsAppRecord, addDevToolsPluginToBuffer, addInspector, callConnectedUpdatedHook, callDevToolsPluginSetupFn, callInspectorUpdatedHook, callStateUpdatedHook, cancelInspectComponentHighLighter, createComponentsDevToolsPlugin, createDevToolsApi, createDevToolsCtxHooks, createRpcClient, createRpcProxy, createRpcServer, type customTypeEnums, devtools, devtoolsAppRecords, devtoolsContext, devtoolsInspector, devtoolsPluginBuffer, devtoolsRouter, devtoolsRouterInfo, devtoolsState, formatInspectorStateValue, getActiveInspectors, getComponentInspector, getDevToolsEnv, getExtensionClientContext, getInspector, getInspectorActions, getInspectorInfo, getInspectorNodeActions, getInspectorStateValueType, getRaw, getRpcClient, getRpcServer, getViteRpcClient, getViteRpcServer, highlight, initDevTools, inspectComponentHighLighter, isPlainObject, onDevToolsClientConnected, onDevToolsConnected, openInEditor, parse, registerDevToolsPlugin, removeCustomCommand, removeDevToolsAppRecord, removeRegisteredPluginApp, resetDevToolsState, scrollToComponent, setActiveAppRecord, setActiveAppRecordId, setDevToolsEnv, setElectronClientContext, setElectronProxyContext, setElectronServerContext, setExtensionClientContext, setIframeServerContext, setOpenInEditorBaseUrl, setRpcServerToGlobal, setViteClientContext, setViteRpcClientToGlobal, setViteRpcServerToGlobal, setViteServerContext, setupDevToolsPlugin, stringify, toEdit, toSubmit, toggleClientConnected, toggleComponentHighLighter, toggleComponentInspectorEnabled, toggleHighPerfMode, unhighlight, updateDevToolsClientDetected, updateDevToolsState, updateTimelineLayersState, getComponentBoundingRect, getInstanceName, createHighlight, updateHighlight };
 diff --git a/dist/index.js b/dist/index.js
-index 530ba2998ca4220345085e1eb09872ddda9d8735..94aefe0191146080f0653e2cb745a83685a053d8 100644
+index 530ba2998ca4220345085e1eb09872ddda9d8735..eb5240d07f2cc452461e30de811ed5dbf63fc7c6 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -2088,6 +2088,26 @@ function update(options) {
@@ -89,10 +89,10 @@ index 530ba2998ca4220345085e1eb09872ddda9d8735..94aefe0191146080f0653e2cb745a836
 +
 +function updateHighlight(options) {
 +  const containerEl = options?.elementId ? document.getElementById(options.elementId) :getContainerElement();
-+  const cardEl = getCardElement();
-+  const nameEl = getNameElement();
-+  const indicatorEl = getIndicatorElement();
 +  if (containerEl) {
++    const cardEl = containerEl.querySelector('#__vue-devtools-component-inspector__card__');
++    const nameEl = containerEl.querySelector('#__vue-devtools-component-inspector__name__');
++    const indicatorEl = containerEl.querySelector('#__vue-devtools-component-inspector__indicator__');
 +    Object.assign(containerEl.style, {
 +      ...containerStyles,
 +      ...getStyles(options.bounds),
