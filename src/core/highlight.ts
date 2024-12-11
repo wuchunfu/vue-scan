@@ -16,7 +16,8 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
     return
   const name = `${getInstanceName(instance)} x ${flashCount}`
 
-  if (document.getElementById(uuid)) {
+  const continerEl = document.getElementById(uuid)
+  if (continerEl) {
     updateHighlight({
       bounds,
       name,
@@ -29,6 +30,31 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
         opacity: '1',
       },
     })
+
+    const styleEl = continerEl.querySelector('style')
+
+    if (styleEl) {
+      styleEl.innerHTML = `
+#${uuid} {
+  transition: opacity 3s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out;
+}
+#${uuid} #__vue-devtools-component-inspector__card__ {
+  background-color: rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, 0.8) !important;
+  color: ${Math.min(255, flashCount * 6) > 128 ? '#fff' : '#000'} !important;
+  font-size: 8px !important;
+  line-height: 12px !important;
+  padding: 2px 4px !important;
+  top: ${bounds.top < 16 ? 0 : '-16px'} !important;
+  display: ${options?.hideCompnentName ? 'none' : 'block'} !important;
+}
+
+#${uuid} #__vue-devtools-component-inspector__indicator__ {
+  display: none !important;
+}
+
+`
+    }
+
     return
   }
 
@@ -53,7 +79,8 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
   transition: opacity 3s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out;
 }
 #${uuid} #__vue-devtools-component-inspector__card__ {
-  background-color: rgba(255, 0, 0, 0.5) !important;
+  background-color: rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, 0.8) !important;
+  color: ${Math.min(255, flashCount * 6) > 128 ? '#fff' : '#000'} !important;
   font-size: 8px !important;
   line-height: 12px !important;
   padding: 2px 4px !important;
