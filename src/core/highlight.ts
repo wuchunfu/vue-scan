@@ -23,8 +23,8 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
       elementId: uuid,
       style: {
         backgroundColor: undefined,
-        borderWidth: '1px',
-        borderColor: 'red',
+        borderWidth: '2px',
+        borderColor: `rgb(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0)`,
         borderStyle: 'solid',
         opacity: '1',
       },
@@ -38,8 +38,8 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
     elementId: uuid,
     style: {
       backgroundColor: undefined,
-      borderWidth: '1px',
-      borderColor: 'red',
+      borderWidth: '2px',
+      borderColor: `rgb(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0)`,
       borderStyle: 'solid',
       opacity: '1',
     },
@@ -50,7 +50,7 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
 
   style.innerHTML = `
 #${uuid} {
-  transition: opacity 3s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
+  transition: opacity 3s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out;
 }
 #${uuid} #__vue-devtools-component-inspector__card__ {
   background-color: rgba(255, 0, 0, 0.5) !important;
