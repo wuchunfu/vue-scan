@@ -169,7 +169,7 @@ function getMountDoms() {
   return elements.filter((element) => {
     // @ts-expect-error vue internal
     return (!!element.__vue_app__ || !!element.__vue__)
-  })
+  }) as HTMLElement[]
 }
 
 const documentObserver = new MutationObserver(throttle(() => {
@@ -181,15 +181,12 @@ const documentObserver = new MutationObserver(throttle(() => {
 
   if (window.__VUE_SCAN__) {
     mountDoms.forEach((mountDom) => {
-      const node = document.getElementById(mountDom.id)
-      if (node) {
-        // @ts-expect-error vue internal
-        if (node.__vue_app__) {
-          documentObserver.disconnect()
-        }
-
-        injectVueScan(node)
+      // @ts-expect-error vue internal
+      if (mountDom.__vue_app__) {
+        documentObserver.disconnect()
       }
+
+      injectVueScan(mountDom)
     })
   }
 }, 600))
