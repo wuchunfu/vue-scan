@@ -111,13 +111,13 @@ export function getComponentBoundingRect(instance: VueAppInstance): ComponentBou
   }
 
   if (isFragment(instance))
-    return getFragmentRect(instance.subTree)
+    return getFragmentRect(instance?.subTree)
 
   else if (el?.nodeType === 1)
     return el?.getBoundingClientRect()
 
   else if (instance?.subTree?.component || instance?.$vnode)
-    return getComponentBoundingRect(instance.subTree.component || instance?.$vnode as VueAppInstance)
+    return getComponentBoundingRect(instance?.subTree?.component || instance?.$vnode as VueAppInstance)
   else
     return DEFAULT_RECT
 }
