@@ -168,7 +168,7 @@ function getMountDoms() {
 
   return elements.filter((element) => {
     // @ts-expect-error vue internal
-    return !!element.id && (!!element.__vue_app__ || !!element.__vue__)
+    return (!!element.__vue_app__ || !!element.__vue__)
   })
 }
 
