@@ -2,6 +2,7 @@ import type { VNodeNormalizedChildren } from 'vue-demi'
 import { throttle } from 'lodash-es'
 import { type BACE_VUE_INSTANCE, createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core/hook'
 import plugin from './index'
+import { createDomMutationObserver } from './utils/MutationObserverDom'
 
 (() => {
   // eslint-disable-next-line node/prefer-global/process
@@ -37,7 +38,9 @@ function injectVueScan(node: HTMLElement) {
       // @ts-expect-error vue internal
       node.__vue_app__.use(window.__VUE_SCAN__.plugin)
 
-      if (!vueInstance.__vue_scan_injected__) {
+      const first = !vueInstance.__vue_scan_injected__
+
+      if (!first) {
         console.log(vueInstance)
       }
 
@@ -102,11 +105,13 @@ function injectVueScan(node: HTMLElement) {
         else if (!vueInstance?.subTree && vueInstance?.children) {
           mixinChildren(vueInstance.children)
         }
+
+        vueInstance.__vue_scan_injected__ = true
       }
 
       mixin(vueInstance)
 
-      if (!vueInstance.__vue_scan_injected__) {
+      if (!first) {
         console.log('vue scan inject success')
       }
 
@@ -117,7 +122,9 @@ function injectVueScan(node: HTMLElement) {
       // @ts-expect-error vue internal
       const vueInstance = node.__vue__ as BACE_VUE_INSTANCE
 
-      if (!vueInstance.__vue_scan_injected__) {
+      const first = !vueInstance.__vue_scan_injected__
+
+      if (first) {
         console.log(vueInstance)
       }
 
@@ -150,11 +157,13 @@ function injectVueScan(node: HTMLElement) {
             mixin(child)
           })
         }
+
+        vueInstance.__vue_scan_injected__ = true
       }
 
       mixin(vueInstance)
 
-      if (!vueInstance.__vue_scan_injected__) {
+      if (first) {
         console.log('vue scan inject success')
       }
 
@@ -172,23 +181,52 @@ function getMountDoms() {
   }) as HTMLElement[]
 }
 
+const vue2ObserverMap = new WeakMap<HTMLElement, MutationObserver>()
+
 const documentObserver = new MutationObserver(throttle(() => {
+  if (!window.__VUE_SCAN__) {
+    return
+  }
+
   const mountDoms = getMountDoms()
 
   if (mountDoms.length === 0) {
     return
   }
 
-  if (window.__VUE_SCAN__) {
-    mountDoms.forEach((mountDom) => {
-      // @ts-expect-error vue internal
-      if (mountDom.__vue_app__) {
-        documentObserver.disconnect()
-      }
+  const isVue3 = mountDoms.some((mountDom) => {
+    // @ts-expect-error vue internal
+    return !!mountDom.__vue_app__
+  })
 
-      injectVueScan(mountDom)
-    })
+  if (isVue3) {
+    documentObserver.disconnect()
   }
+
+  mountDoms.forEach((mountDom) => {
+    // @ts-expect-error vue internal
+    if (mountDom.__vue_app__) {
+      // vue3
+      documentObserver.disconnect()
+      injectVueScan(mountDom)
+    }
+    else {
+      // vue2
+      if (!vue2ObserverMap.get(mountDom)) {
+        vue2ObserverMap.set(mountDom, createDomMutationObserver(
+          () => mountDom,
+          () => {
+            injectVueScan(mountDom)
+          },
+          {
+            childList: true,
+            subtree: true,
+          },
+          600,
+        ))
+      }
+    }
+  })
 }, 600))
 
 documentObserver.observe(document.body, {
