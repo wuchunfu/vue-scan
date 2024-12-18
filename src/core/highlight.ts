@@ -7,32 +7,39 @@ import {
 import { throttle } from 'lodash-es'
 import { getComponentBoundingRect, getInstanceName } from './utils'
 
-const updateHighlight = throttle(
-  (
-    options: ComponentHighLighterOptions & { elementId?: string, style?: Partial<CSSStyleDeclaration> },
-    flashCount: number,
-    hideCompnentName?: boolean,
-  ) => {
-    _updateHighlight(options)
+type UpdateHighlightFn = (
+  options: ComponentHighLighterOptions & { elementId?: string, style?: Partial<CSSStyleDeclaration> },
+  flashCount: number,
+  hideCompnentName?: boolean,
+) => void
 
-    if (!options.elementId) {
-      return
-    }
+export function createUpdateHighlight(): UpdateHighlightFn {
+  return throttle<UpdateHighlightFn>(
+    (
+      options: ComponentHighLighterOptions & { elementId?: string, style?: Partial<CSSStyleDeclaration> },
+      flashCount: number,
+      hideCompnentName?: boolean,
+    ) => {
+      _updateHighlight(options)
 
-    const {
-      bounds,
-      elementId: uuid,
-    } = options
+      if (!options.elementId) {
+        return
+      }
 
-    const continerEl = document.getElementById(uuid)
-    if (!continerEl) {
-      return
-    }
+      const {
+        bounds,
+        elementId: uuid,
+      } = options
 
-    const styleEl = continerEl.querySelector('style')
+      const continerEl = document.getElementById(uuid)
+      if (!continerEl) {
+        return
+      }
 
-    if (styleEl) {
-      styleEl.innerHTML = `
+      const styleEl = continerEl.querySelector('style')
+
+      if (styleEl) {
+        styleEl.innerHTML = `
 #${uuid} {
   transition: opacity 3s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out;
 }
@@ -51,14 +58,20 @@ const updateHighlight = throttle(
 }
 
 `
-    }
-  },
-  300,
-)
+      }
+    },
+    300,
+  )
+}
 
-export function highlight(instance: VueAppInstance, uuid: string, flashCount: number, options?: {
-  hideCompnentName?: boolean
-}) {
+export function highlight(
+  instance: VueAppInstance & { __updateHighlight: UpdateHighlightFn },
+  uuid: string,
+  flashCount: number,
+  options?: {
+    hideCompnentName?: boolean
+  },
+) {
   const bounds = getComponentBoundingRect(instance)
   if (!bounds.width && !bounds.height)
     return
@@ -66,7 +79,7 @@ export function highlight(instance: VueAppInstance, uuid: string, flashCount: nu
 
   const continerEl = document.getElementById(uuid)
   if (continerEl) {
-    updateHighlight(
+    instance.__updateHighlight(
       {
         bounds,
         name,

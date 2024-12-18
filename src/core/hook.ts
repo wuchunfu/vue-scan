@@ -1,6 +1,6 @@
 import type { VueAppInstance } from '@vue/devtools-kit'
-import { getInstanceName } from '@vue/devtools-kit'
-import { clearhighlight, highlight, unhighlight } from './highlight'
+import { clearhighlight, createUpdateHighlight, highlight, unhighlight } from './highlight'
+import { getInstanceName } from './utils'
 
 export interface BACE_VUE_INSTANCE extends VueAppInstance {
   __vue_scan_injected__?: boolean
@@ -41,6 +41,10 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
   return () => {
     if (!instance.__flashCount) {
       instance.__flashCount = 0
+    }
+
+    if (!instance.__updateHighlight) {
+      instance.__updateHighlight = createUpdateHighlight()
     }
 
     instance.__flashCount++

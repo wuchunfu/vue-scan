@@ -18,6 +18,14 @@ const plugin: Plugin<VueScanOptions> = {
           return (this as any).$
         })() as VueAppInstance
 
+        if (!instance.__bu) {
+          instance.__bu = createOnBeforeUpdateHook(instance, options)
+        }
+
+        if (!instance.__bum) {
+          instance.__bum = createOnBeforeUnmountHook(instance)
+        }
+
         instance.__vue_scan_injected__ = true
       },
       beforeUpdate() {
@@ -25,18 +33,14 @@ const plugin: Plugin<VueScanOptions> = {
           return (this as any).$
         })() as VueAppInstance
 
-        const hook = createOnBeforeUpdateHook(instance, options)
-
-        hook?.()
+        instance.__bu?.()
       },
       beforeUnmount() {
         const instance = (() => {
           return (this as any).$
         })() as VueAppInstance
 
-        const hook = createOnBeforeUnmountHook(instance)
-
-        hook?.()
+        instance.__bum?.()
       },
     })
   },
