@@ -1,11 +1,26 @@
 import {
   updateHighlight as _updateHighlight,
+  type ComponentBoundingRect,
   type ComponentHighLighterOptions,
   createHighlight,
   type VueAppInstance,
 } from '@vue/devtools-kit'
 import { throttle } from 'lodash-es'
 import { getComponentBoundingRect, getInstanceName } from './utils'
+
+export function isInViewport(bounds: ComponentBoundingRect): boolean {
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const scrollTop = window.scrollY
+  const scrollLeft = window.scrollX
+
+  return !(
+    bounds.right < scrollLeft
+    || bounds.bottom < scrollTop
+    || bounds.left > scrollLeft + viewportWidth
+    || bounds.top > scrollTop + viewportHeight
+  )
+}
 
 type UpdateHighlightFn = (
   options: ComponentHighLighterOptions & { elementId?: string, style?: Partial<CSSStyleDeclaration> },
@@ -20,6 +35,10 @@ export function createUpdateHighlight(): UpdateHighlightFn {
       flashCount: number,
       hideCompnentName?: boolean,
     ) => {
+      if (!isInViewport(options.bounds)) {
+        return
+      }
+
       _updateHighlight(options)
 
       if (!options.elementId) {
@@ -75,6 +94,10 @@ export function highlight(
   const bounds = getComponentBoundingRect(instance)
   if (!bounds.width && !bounds.height)
     return
+  if (!isInViewport(bounds)) {
+    return
+  }
+
   const name = `${getInstanceName(instance)} x ${flashCount}`
 
   const continerEl = document.getElementById(uuid)
