@@ -13,7 +13,7 @@ const plugin: Plugin<VueScanBaseOptions> = {
     }
 
     app.mixin({
-      beforeMount() {
+      mounted() {
         const instance = this as VueAppInstance
 
         if (!instance.__bu) {
