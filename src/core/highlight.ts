@@ -180,33 +180,31 @@ class HighlightCanvas {
     const padding = 6
     const labelHeight = 20
 
-    // 计算标签位置
-    let labelX = bounds.left - scrollLeft + padding // 在框内左侧
-    let labelY = bounds.top - scrollTop + padding // 在框内顶部
+    // 计算标签位置 - 移除额外的padding，直接贴在边框上
+    let labelX = bounds.left - scrollLeft
+    let labelY = bounds.top - scrollTop
 
     // 确保标签在视口内
     const viewportHeight = window.innerHeight
-    const labelTotalHeight = labelHeight + padding * 2
+    const labelTotalHeight = labelHeight
+    const viewportWidth = window.innerWidth
+    const labelTotalWidth = labelMetrics.width + padding * 2
 
     // 如果标签底部超出视口
     if (labelY + labelTotalHeight > viewportHeight) {
-      // 将标签固定在视口底部
-      labelY = viewportHeight - labelTotalHeight - padding
+      labelY = viewportHeight - labelTotalHeight
     }
 
     // 如果标签右侧超出视口
-    const viewportWidth = window.innerWidth
-    const labelTotalWidth = labelMetrics.width + padding * 2
     if (labelX + labelTotalWidth > viewportWidth) {
-      // 将标签固定在视口右侧
-      labelX = viewportWidth - labelTotalWidth - padding
+      labelX = viewportWidth - labelTotalWidth
     }
 
     // 绘制背景
     this.ctx.fillStyle = `rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, ${opacity * 0.8})`
     this.ctx.fillRect(labelX, labelY, labelMetrics.width + padding * 2, labelHeight)
 
-    // 绘制文本
+    // 绘制文本 - 确保文本在背景中居中
     this.ctx.fillStyle = Math.min(255, flashCount * 6) > 128
       ? `rgba(255, 255, 255, ${opacity})`
       : `rgba(0, 0, 0, ${opacity})`
