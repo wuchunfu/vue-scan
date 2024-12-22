@@ -1,11 +1,11 @@
 {
   "name": "vue-scan-ext",
   "type": "module",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "private": true,
   "description": "manifest.json description",
   "scripts": {
-    "dev": "wxt",
+    "dev": "wxt -b edge",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
