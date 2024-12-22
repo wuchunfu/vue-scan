@@ -1,6 +1,6 @@
 export interface VueScanBaseOptions {
   enable?: boolean
-  hideCompnentName?: boolean
+  hideComponentName?: boolean
   interval?: number
 }
 

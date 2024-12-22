@@ -18,7 +18,7 @@ export interface BACE_VUE_INSTANCE extends VueAppInstance {
 }
 
 export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?: {
-  hideCompnentName?: boolean
+  hideComponentName?: boolean
   interval?: number
 }) {
   const {
