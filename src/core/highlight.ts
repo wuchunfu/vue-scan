@@ -58,6 +58,7 @@ class HighlightCanvas {
     document.body.appendChild(this.canvas)
     this.updateCanvasSize()
     window.addEventListener('resize', () => this.updateCanvasSize())
+    window.addEventListener('scroll', () => this.scheduleRender())
   }
 
   private updateCanvasSize() {
