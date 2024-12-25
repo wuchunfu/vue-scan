@@ -2,7 +2,7 @@ export default defineContentScript({
   matches: ['<all_urls>'],
   async main() {
     // 获取 autoInject 状态
-    const { autoInject = true } = await browser.storage.local.get('autoInject')
+    const { autoInject = false } = await browser.storage.local.get('autoInject')
 
     // 根据状态决定是否注入脚本
     if (autoInject) {

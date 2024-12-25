@@ -2,6 +2,9 @@ export default defineBackground(() => {
   console.log('Background script started', { id: browser.runtime.id })
 
   browser.storage.local.get('autoInject').then(({ autoInject }) => {
+    if (autoInject === undefined) {
+      browser.storage.local.set({ autoInject: false })
+    }
     console.log('Initial autoInject state:', autoInject)
   })
 
