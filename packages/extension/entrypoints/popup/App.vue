@@ -82,14 +82,14 @@ async function removePattern(pattern: string) {
           @keyup.enter="addPattern"
         >
         <button
-          class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 outline-none border-none cursor-pointer"
           @click="addPattern"
         >
           Add
         </button>
       </div>
 
-      <ul class="flex flex-col gap-1">
+      <ul class="flex flex-col gap-1 pl-0">
         <li
           v-for="pattern in blacklist"
           :key="pattern"
@@ -97,7 +97,7 @@ async function removePattern(pattern: string) {
         >
           <span class="truncate">{{ pattern }}</span>
           <button
-            class="text-red-500 hover:text-red-600"
+            class="text-red-500 hover:text-red-600 cursor-pointer"
             @click="removePattern(pattern)"
           >
             ✕
