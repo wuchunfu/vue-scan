@@ -8,7 +8,14 @@ const newPattern = ref('')
 onMounted(async () => {
   const result = await browser.storage.local.get(['autoInject', 'blacklist'])
   autoInjectEnabled.value = Boolean(result.autoInject ?? false)
-  blacklist.value = JSON.parse(result.blacklist ?? '[]')
+  blacklist.value = (() => {
+    try {
+      return JSON.parse(_blacklist ?? '[]') as string[]
+    }
+    catch {
+      return []
+    }
+  })()
 })
 
 // 监听 autoInjectEnabled 的变化

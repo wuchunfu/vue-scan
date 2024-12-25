@@ -10,7 +10,14 @@ export default defineContentScript({
       blacklist: string
     } = await browser.storage.local.get(['autoInject', 'blacklist'])
 
-    const blacklist = JSON.parse(_blacklist) as string[]
+    const blacklist = (() => {
+      try {
+        return JSON.parse(_blacklist ?? '[]') as string[]
+      }
+      catch {
+        return []
+      }
+    })()
 
     // 检查当前 URL 是否在黑名单中
     const currentUrl = window.location.href
