@@ -1,31 +1,29 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
+import { autoInject, blacklist } from '../../utils/storage'
 
 const autoInjectEnabled = ref(false)
-const blacklist = ref<string[]>([])
+const blacklistPatterns = ref<string[]>([])
 const newPattern = ref('')
 
 onMounted(async () => {
-  const result = await browser.storage.local.get(['autoInject', 'blacklist'])
-  autoInjectEnabled.value = Boolean(result.autoInject ?? false)
-  blacklist.value = (() => {
-    try {
-      return JSON.parse(_blacklist ?? '[]') as string[]
-    }
-    catch {
-      return []
-    }
-  })()
+  const [isAutoInject, _patterns] = await Promise.all([
+    autoInject.getValue(),
+    blacklist.getValue(),
+  ])
+
+  autoInjectEnabled.value = Boolean(isAutoInject)
+  blacklistPatterns.value = Object.values(_patterns)
 })
 
-// 监听 autoInjectEnabled 的变化
+// Watch autoInject changes
 watch(autoInjectEnabled, async (value) => {
-  await browser.storage.local.set({ autoInject: value })
+  await autoInject.setValue(value)
 })
 
-// 监听 blacklist 的变化
-watch(blacklist, async (value) => {
-  await browser.storage.local.set({ blacklist: JSON.stringify(value) })
+// Watch blacklist changes
+watch(blacklistPatterns, async (value) => {
+  await blacklist.setValue(value)
 }, { deep: true })
 
 function isValidPattern(pattern: string) {
@@ -46,14 +44,14 @@ async function addPattern() {
     return
   }
 
-  if (!blacklist.value?.includes(newPattern.value)) {
-    blacklist.value = [...blacklist.value, newPattern.value]
+  if (!blacklistPatterns.value.includes(newPattern.value)) {
+    blacklistPatterns.value = [...blacklistPatterns.value, newPattern.value]
     newPattern.value = ''
   }
 }
 
 async function removePattern(pattern: string) {
-  blacklist.value = blacklist.value.filter(p => p !== pattern)
+  blacklistPatterns.value = blacklistPatterns.value.filter(p => p !== pattern)
 }
 </script>
 
@@ -91,7 +89,7 @@ async function removePattern(pattern: string) {
 
       <ul class="flex flex-col gap-1 pl-0">
         <li
-          v-for="pattern in blacklist"
+          v-for="pattern in blacklistPatterns"
           :key="pattern"
           class="flex justify-between items-center gap-2 px-2 py-1 bg-gray-100 rounded"
         >
