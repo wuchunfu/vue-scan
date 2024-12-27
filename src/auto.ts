@@ -78,9 +78,7 @@ function injectVueScan(node: HTMLElement) {
 
           if (onBeforeUpdate) {
             if (vueInstance?.bu) {
-              const newbu = [...vueInstance?.bu]
-              newbu.push(onBeforeUpdate)
-              vueInstance.bu = newbu
+              vueInstance.bu.push(onBeforeUpdate)
             }
             else {
               vueInstance!.bu = [onBeforeUpdate]
@@ -89,9 +87,7 @@ function injectVueScan(node: HTMLElement) {
 
           if (onBeforeUnmount) {
             if (vueInstance?.bum) {
-              const newbum = [...vueInstance?.bum]
-              newbum.push(onBeforeUnmount)
-              vueInstance.bum = newbum
+              vueInstance.bum.push(onBeforeUnmount)
             }
             else {
               vueInstance!.bum = [onBeforeUnmount]
