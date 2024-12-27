@@ -38,7 +38,7 @@ function injectVueScan(node: HTMLElement) {
       // @ts-expect-error vue internal
       node.__vue_app__.use(window.__VUE_SCAN__.plugin)
 
-      const first = !vueInstance.__vue_scan_injected__
+      const first = !vueInstance?.__vue_scan_injected__
 
       if (!first) {
         console.log(vueInstance)
@@ -72,13 +72,15 @@ function injectVueScan(node: HTMLElement) {
       }
 
       function mixin(vueInstance: BACE_VUE_INSTANCE) {
-        if (vueInstance.subTree?.el && vueInstance.__vue_scan_injected__ !== true) {
+        if (vueInstance.subTree?.el && vueInstance?.__vue_scan_injected__ !== true) {
           const onBeforeUpdate = createOnBeforeUpdateHook(vueInstance)
           const onBeforeUnmount = createOnBeforeUnmountHook(vueInstance)
 
           if (onBeforeUpdate) {
             if (vueInstance?.bu) {
-              vueInstance.bu.push(onBeforeUpdate)
+              const newbu = [...vueInstance?.bu]
+              newbu.push(onBeforeUpdate)
+              vueInstance.bu = newbu
             }
             else {
               vueInstance!.bu = [onBeforeUpdate]
@@ -87,12 +89,16 @@ function injectVueScan(node: HTMLElement) {
 
           if (onBeforeUnmount) {
             if (vueInstance?.bum) {
-              vueInstance.bum.push(onBeforeUnmount)
+              const newbum = [...vueInstance?.bum]
+              newbum.push(onBeforeUnmount)
+              vueInstance.bum = newbum
             }
             else {
               vueInstance!.bum = [onBeforeUnmount]
             }
           }
+
+          vueInstance.__vue_scan_injected__ = true
         }
 
         if (!vueInstance?.subTree?.component && vueInstance?.subTree?.children) {
@@ -105,8 +111,6 @@ function injectVueScan(node: HTMLElement) {
         else if (!vueInstance?.subTree && vueInstance?.children) {
           mixinChildren(vueInstance.children)
         }
-
-        vueInstance.__vue_scan_injected__ = true
       }
 
       mixin(vueInstance)
@@ -120,22 +124,24 @@ function injectVueScan(node: HTMLElement) {
     // @ts-expect-error vue internal
     else if (node.__vue__) { // VUE 2
       // @ts-expect-error vue internal
-      const vueInstance = node.__vue__ as BACE_VUE_INSTANCE
+      const vueInstance = (node.__vue__?.$vnode?.componentInstance || node.__vue__) as BACE_VUE_INSTANCE
 
-      const first = !vueInstance.__vue_scan_injected__
+      const first = !vueInstance?.__vue_scan_injected__
 
       if (first) {
         console.log(vueInstance)
       }
 
       function mixin(vueInstance: BACE_VUE_INSTANCE) {
-        if (vueInstance?.$el && vueInstance.__vue_scan_injected__ !== true) {
+        if (vueInstance?.$el && vueInstance?.__vue_scan_injected__ !== true) {
           const onBeforeUpdate = createOnBeforeUpdateHook(vueInstance)
           const onBeforeUnmount = createOnBeforeUnmountHook(vueInstance)
 
           if (onBeforeUpdate) {
             if (vueInstance?.$options?.beforeUpdate) {
-              vueInstance.$options.beforeUpdate.push(onBeforeUpdate)
+              const newBeforeUpdate = [...vueInstance.$options.beforeUpdate]
+              newBeforeUpdate.push(onBeforeUpdate)
+              vueInstance.$set(vueInstance.$options, 'beforeUpdate', newBeforeUpdate)
             }
             else if (vueInstance?.$options) {
               vueInstance.$set(vueInstance.$options, 'beforeUpdate', [onBeforeUpdate])
@@ -144,12 +150,16 @@ function injectVueScan(node: HTMLElement) {
 
           if (onBeforeUnmount) {
             if (vueInstance?.$options?.beforeDestroy) {
-              vueInstance.$options.beforeDestroy.push(onBeforeUnmount)
+              const newBeforeDestroy = [...vueInstance.$options.beforeDestroy]
+              newBeforeDestroy.push(onBeforeUnmount)
+              vueInstance.$set(vueInstance.$options, 'beforeDestroy', newBeforeDestroy)
             }
             else if (vueInstance?.$options) {
               vueInstance.$set(vueInstance.$options, 'beforeDestroy', [onBeforeUnmount])
             }
           }
+
+          vueInstance.__vue_scan_injected__ = true
         }
 
         if (vueInstance?.$children) {
@@ -157,8 +167,6 @@ function injectVueScan(node: HTMLElement) {
             mixin(child)
           })
         }
-
-        vueInstance.__vue_scan_injected__ = true
       }
 
       mixin(vueInstance)
@@ -216,6 +224,7 @@ const documentObserver = new MutationObserver(throttle(() => {
         vue2ObserverMap.set(mountDom, createDomMutationObserver(
           () => mountDom,
           () => {
+            console.log('injectVueScan')
             injectVueScan(mountDom)
           },
           {
