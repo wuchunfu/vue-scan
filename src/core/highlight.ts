@@ -13,14 +13,13 @@ export interface ComponentBoundingRect {
 export function isInViewport(bounds: ComponentBoundingRect): boolean {
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
-  const scrollTop = window.scrollY
-  const scrollLeft = window.scrollX
 
+  // 只要元素和视口有交集，就认为是在视口内
   return !(
-    bounds.right < scrollLeft
-    || bounds.bottom < scrollTop
-    || bounds.left > scrollLeft + viewportWidth
-    || bounds.top > scrollTop + viewportHeight
+    bounds.left >= viewportWidth // 完全在视口右侧
+    || bounds.right <= 0 // 完全在视口左侧
+    || bounds.top >= viewportHeight // 完全在视口下方
+    || bounds.bottom <= 0 // 完全在视口上方
   )
 }
 
@@ -109,9 +108,6 @@ class HighlightCanvas {
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    const scrollLeft = window.scrollX
-    const scrollTop = window.scrollY
-
     this.ctx.font = '12px sans-serif'
     this.ctx.textBaseline = 'middle'
 
@@ -148,9 +144,9 @@ class HighlightCanvas {
           break
       }
 
-      this.drawBorder(item, scrollLeft, scrollTop)
+      this.drawBorder(item)
       if (!item.hideComponentName) {
-        this.drawLabel(item, scrollLeft, scrollTop, item.opacity)
+        this.drawLabel(item, item.opacity)
       }
     }
 
@@ -163,27 +159,27 @@ class HighlightCanvas {
     }
   }
 
-  private drawBorder(item: HighlightItem, scrollLeft: number, scrollTop: number) {
+  private drawBorder(item: HighlightItem) {
     const { bounds, flashCount, opacity } = item
     this.ctx.strokeStyle = `rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, ${opacity})`
     this.ctx.lineWidth = 2
     this.ctx.strokeRect(
-      bounds.left - scrollLeft,
-      bounds.top - scrollTop,
+      bounds.left,
+      bounds.top,
       bounds.width,
       bounds.height,
     )
   }
 
-  private drawLabel(item: HighlightItem, scrollLeft: number, scrollTop: number, opacity: number) {
+  private drawLabel(item: HighlightItem, opacity: number) {
     const { bounds, name, flashCount } = item
     const labelMetrics = this.getTextMetrics(name)
     const padding = 6
     const labelHeight = 20
 
     // 计算标签位置 - 移除额外的padding，直接贴在边框上
-    let labelX = bounds.left - scrollLeft
-    let labelY = bounds.top - scrollTop
+    let labelX = bounds.left
+    let labelY = bounds.top
 
     // 确保标签在视口内
     const viewportHeight = window.innerHeight
@@ -285,6 +281,7 @@ export function highlight(
   },
 ) {
   const bounds = getComponentBoundingRect(instance)
+
   if (!bounds.width && !bounds.height)
     return
   if (!isInViewport(bounds))
