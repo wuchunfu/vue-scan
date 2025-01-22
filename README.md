@@ -33,6 +33,8 @@ interface Options {
 }
 ```
 
+### Vue 3
+
 ```ts
 // vue3
 import { createApp } from 'vue'
@@ -45,6 +47,8 @@ app.use<VueScanOptions>(VueScan, {})
 app.mount('#app')
 ```
 
+### Vue 2
+
 ```ts
 // vue2
 import Vue from 'vue'
@@ -56,6 +60,32 @@ Vue.use<VueScanBaseOptions>(VueScan, {})
 new Vue({
   render: h => h(App),
 }).$mount('#app')
+```
+
+### Nuxt Module
+
+```bash
+# npm
+npm install z-vue-scan-nuxt-module
+
+# yarn
+yarn add z-vue-scan-nuxt-module
+
+# pnpm
+pnpm add z-vue-scan-nuxt-module
+```
+
+You can use z-vue-scan in your Nuxt project by adding it to the `modules` section in your `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['z-vue-scan-nuxt-module'],
+  vueScan: {
+    // options
+    enable: true,
+    hideCompnentName: false
+  }
+})
 ```
 
 ## Development

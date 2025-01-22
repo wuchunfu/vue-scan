@@ -44,10 +44,10 @@ jobs:
 
       - name: Switch to packages/nuxt
         run: cd packages/nuxt
-      
+
       - name: Build vue scan
         run: pnpm run prepack
-      
+
       - name: Publish to NPM
         run: pnpm publish --access public --no-git-checks
         env:
