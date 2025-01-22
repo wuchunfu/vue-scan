@@ -34,7 +34,7 @@ jobs:
       - name: PNPM build
         run: pnpm run build
 
-      - name: Publish to NPM
+      - name: Publish vue scan to NPM
         run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
@@ -42,15 +42,15 @@ jobs:
 
       # publish nuxt module
 
-      - name: Build vue scan
+      - name: Prepare vue scan nuxt module
         working-directory: packages/nuxt
         run: pnpm run dev:prepare
-      
-      - name: Build vue scan
+
+      - name: Build vue scan nuxt module
         working-directory: packages/nuxt
         run: pnpm run prepack
 
-      - name: Publish to NPM
+      - name: Publish vue scan nuxt module to NPM
         working-directory: packages/nuxt
         run: pnpm publish --access public --no-git-checks
         env:
