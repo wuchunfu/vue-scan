@@ -44,6 +44,10 @@ jobs:
 
       - name: Build vue scan
         working-directory: packages/nuxt
+        run: pnpm run dev:prepare
+      
+      - name: Build vue scan
+        working-directory: packages/nuxt
         run: pnpm run prepack
 
       - name: Publish to NPM
