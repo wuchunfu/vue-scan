@@ -60,7 +60,7 @@
     "bumpp": "^9.8.1",
     "consola": "^3.2.3",
     "lodash-es": "^4.17.21",
-    "typescript": "^5.6.3",
+    "typescript": "~5.6.3",
     "unbuild": "^2.0.0",
     "vue": "^3.0.0"
   },
