@@ -34,17 +34,29 @@ interface HighlightItem {
   state: 'fade-in' | 'visible' | 'fade-out'
 }
 
+export interface HighlightCanvasOptions {
+  /** default 450ms */
+  displayDuration?: number
+  /** default 25ms */
+  fadeInDuration?: number
+  /** default 50ms */
+  fadeOutDuration?: number
+}
+
 class HighlightCanvas {
   private canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
-  private readonly DISPLAY_DURATION = 1000
-  private readonly FADE_IN_DURATION = 300
-  private readonly FADE_OUT_DURATION = 300
+  private readonly DISPLAY_DURATION: number
+  private readonly FADE_IN_DURATION: number
+  private readonly FADE_OUT_DURATION: number
   private highlights: Map<string, HighlightItem> = new Map()
   private animationFrame: number | null = null
   private textMetricsCache: Map<string, TextMetrics> = new Map()
 
-  constructor() {
+  constructor(options?: HighlightCanvasOptions) {
+    this.DISPLAY_DURATION = options?.displayDuration ?? 450
+    this.FADE_IN_DURATION = options?.fadeInDuration ?? 25
+    this.FADE_OUT_DURATION = options?.fadeOutDuration ?? 50
     this.canvas = document.createElement('canvas')
     this.canvas.style.cssText = `
       position: fixed;
@@ -245,7 +257,12 @@ class HighlightCanvas {
   }
 }
 
-let highlightCanvas: HighlightCanvas | null = new HighlightCanvas()
+let highlightCanvas: HighlightCanvas | null = null
+
+function getHighlightCanvas(options?: HighlightCanvasOptions) {
+  highlightCanvas = new HighlightCanvas(options)
+  return highlightCanvas
+}
 
 window.addEventListener('unload', () => {
   if (highlightCanvas) {
@@ -278,8 +295,10 @@ export function highlight(
   flashCount: number,
   options?: {
     hideComponentName?: boolean
-  },
+  } & HighlightCanvasOptions,
 ) {
+  const highlightCanvas = getHighlightCanvas(options)
+
   const bounds = getComponentBoundingRect(instance)
 
   if (!bounds.width && !bounds.height)

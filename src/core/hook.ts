@@ -1,5 +1,11 @@
 import type { VueAppInstance } from '@vue/devtools-kit'
-import { clearhighlight, createUpdateHighlight, highlight, unhighlight } from './highlight'
+import {
+  clearhighlight,
+  createUpdateHighlight,
+  highlight,
+  type HighlightCanvasOptions,
+  unhighlight,
+} from './highlight'
 import { getInstanceName } from './utils'
 
 export interface BACE_VUE_INSTANCE extends VueAppInstance {
@@ -20,7 +26,7 @@ export interface BACE_VUE_INSTANCE extends VueAppInstance {
 export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?: {
   hideComponentName?: boolean
   interval?: number
-}) {
+} & HighlightCanvasOptions) {
   const {
     interval = 1000,
   } = options || {}
