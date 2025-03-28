@@ -37,9 +37,9 @@ interface HighlightItem {
 class HighlightCanvas {
   private canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
-  private readonly DISPLAY_DURATION = 1000
-  private readonly FADE_IN_DURATION = 300
-  private readonly FADE_OUT_DURATION = 300
+  private readonly DISPLAY_DURATION = 200
+  private readonly FADE_IN_DURATION = 25
+  private readonly FADE_OUT_DURATION = 75
   private highlights: Map<string, HighlightItem> = new Map()
   private animationFrame: number | null = null
   private textMetricsCache: Map<string, TextMetrics> = new Map()
