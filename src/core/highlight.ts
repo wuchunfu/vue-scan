@@ -260,6 +260,8 @@ class HighlightCanvas {
 let highlightCanvas: HighlightCanvas | null = null
 
 function getHighlightCanvas(options?: HighlightCanvasOptions) {
+  if (highlightCanvas)
+    return highlightCanvas
   highlightCanvas = new HighlightCanvas(options)
   return highlightCanvas
 }
